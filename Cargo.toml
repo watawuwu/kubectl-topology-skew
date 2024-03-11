@@ -1,0 +1,49 @@
+[package]
+name = "kubectl-topology-skew"
+version = "0.1.0"
+authors = ["Wataru Matsui <watawuwu@3bi.tech>"]
+readme = "README.md"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "kubectl plugin to display the count of pods and nodes per topology "
+repository = "https://github.com/watawuwu/kubectl-topology-skew"
+keywords = [
+    "kubernetes",
+    "kubectl",
+    "kubernetes-topology-skew",
+    "krew-plugin",
+    "cli",
+]
+categories = ["command-line-utilities", "text-processing"]
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive", "env"] }
+comfy-table = "7.1.0"
+futures = "0.3.30"
+k8s-openapi = { version = "0.21", default-features = false, features = [
+    "v1_29",
+] }
+kube = { version = "0", features = ["runtime"] }
+log = "0.4.13"
+pretty_env_logger = "0.5"
+prettytable-rs = "0.10"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0"
+strum = { version = "0", features = ["derive"] }
+termtree = "0"
+tokio = { version = "1.35", features = ["full"] }
+itertools = "0"
+erased-serde = "0.4.4"
+
+
+[dev-dependencies]
+hyper = { version = "=0.14", features = [
+    "full",
+] } # fixed version to match kube-rs
+http = "=0.2" # fixed version to match kube-rs
+tower-test = "=0.4" # fixed version to match kube-rs
+
+[profile.release]
+strip = true

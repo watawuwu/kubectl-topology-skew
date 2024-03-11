@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Node
+metadata:
+  name: test1
+  labels:
+    topology.kubernetes.io/region: asia-northeast1
+    topology.kubernetes.io/zone: asia-northeast1-a
+spec:
+  podCIDRs:
+  - 10.244.0.0/24
+  providerID: kind://docker/v1.29.0/v1.29.0-control-plane
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: test2
+  labels:
+    topology.kubernetes.io/region: asia-northeast1
+    topology.kubernetes.io/zone: asia-northeast1-b
+spec:
+  podCIDRs:
+  - 10.244.0.0/24
+  providerID: kind://docker/v1.29.0/v1.29.0-control-plane
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: test3
+  labels:
+    topology.kubernetes.io/region: asia-northeast1
+    topology.kubernetes.io/zone: asia-northeast1-c
+spec:
+  podCIDRs:
+  - 10.244.0.0/24
+  providerID: kind://docker/v1.29.0/v1.29.0-control-plane
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: test4
+  labels:
+    topology.kubernetes.io/region: asia-northeast1
+    topology.kubernetes.io/zone: asia-northeast1-a
+spec:
+  podCIDRs:
+  - 10.244.0.0/24
+  providerID: kind://docker/v1.29.0/v1.29.0-control-plane

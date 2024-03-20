@@ -86,7 +86,9 @@ Options:
 
 ### Installing
 
-- TODO
+```
+$ brew install watawuwu/homebrew-tap/kubectl-topology-skew
+```
 
 ## Contributing
 

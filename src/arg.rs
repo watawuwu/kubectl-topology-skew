@@ -5,6 +5,7 @@ use clap::builder::{
     Styles,
 };
 use clap::{Parser, Subcommand, ValueEnum};
+use clap_complete::Shell;
 use std::{
     collections::BTreeMap,
     fmt::{Display, Formatter},
@@ -99,6 +100,8 @@ pub enum SubCommand {
         #[command(flatten)]
         options: NodeOptions,
     },
+    /// Generate shell completion
+    Completion { shell: Shell },
 }
 
 #[derive(Debug, Parser)]

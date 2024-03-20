@@ -21,7 +21,8 @@ use crate::pod::pod;
 use crate::statefulset::statefulset;
 use crate::topology::*;
 use anyhow::Result;
-use clap::Parser;
+use clap::{CommandFactory, Parser};
+use clap_complete::{generate, Generator};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -40,10 +41,21 @@ async fn main() -> Result<()> {
         SubCommand::DaemonSet { options } => daemonset(options, cli.clone()).await?,
         SubCommand::Job { options } => job(options, cli.clone()).await?,
         SubCommand::All { options } => all(options, cli.clone()).await?,
+        SubCommand::Completion { shell } => {
+            print_completions(shell);
+            return Ok(());
+        }
     };
     let text = view::out(topologies, args.output)?;
 
     println!("{text}");
 
     Ok(())
+}
+
+fn print_completions<G: Generator>(gen: G) {
+    let mut cmd = Args::command();
+    let name = cmd.get_name().to_owned();
+
+    generate(gen, &mut cmd, name, &mut std::io::stdout());
 }

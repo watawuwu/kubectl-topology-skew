@@ -72,13 +72,13 @@ pub enum SubCommand {
         options: ResourceWithNameOptions,
     },
     /// Print statefulset topology skew
-    #[command(visible_alias("sts"))]
+    #[command(name = "statefulset", visible_alias("sts"))]
     StatefulSet {
         #[command(flatten)]
         options: ResourceWithNameOptions,
     },
     /// Print daemonset topology skew
-    #[command(visible_alias("ds"))]
+    #[command(name = "daemonset", visible_alias("ds"))]
     DaemonSet {
         #[command(flatten)]
         options: ResourceWithNameOptions,

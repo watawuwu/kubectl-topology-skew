@@ -6,6 +6,11 @@ metadata:
   labels:
     topology.kubernetes.io/region: asia-northeast1
     topology.kubernetes.io/zone: asia-northeast1-a
+status:
+  conditions:
+  - reason: KubeletReady
+    status: "True"
+    type: Ready
 ---
 apiVersion: v1
 kind: Node
@@ -14,6 +19,11 @@ metadata:
   labels:
     topology.kubernetes.io/region: asia-northeast1
     topology.kubernetes.io/zone: asia-northeast1-b
+status:
+  conditions:
+  - reason: KubeletReady
+    status: "True"
+    type: Ready
 ---
 apiVersion: v1
 kind: Node
@@ -22,3 +32,21 @@ metadata:
   labels:
     topology.kubernetes.io/region: asia-northeast1
     topology.kubernetes.io/zone: asia-northeast1-c
+status:
+  conditions:
+  - reason: KubeletReady
+    status: "True"
+    type: Ready
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: test-node4
+  labels:
+    topology.kubernetes.io/region: asia-northeast1
+    topology.kubernetes.io/zone: asia-northeast1-a
+status:
+  conditions:
+  - reason: KubeletReady
+    status: "True"
+    type: Ready

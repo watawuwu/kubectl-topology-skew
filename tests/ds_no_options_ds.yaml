@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ds1
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: ds1
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ds2
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: ds2

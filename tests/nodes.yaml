@@ -1,23 +1,38 @@
 apiVersion: v1
 kind: Node
 metadata:
-  name: test-node1
+  name: node1
   labels:
     topology.kubernetes.io/region: asia-northeast1
     topology.kubernetes.io/zone: asia-northeast1-a
+status:
+  conditions:
+  - reason: KubeletReady
+    status: "True"
+    type: Ready
 ---
 apiVersion: v1
 kind: Node
 metadata:
-  name: test-node2
+  name: node2
   labels:
     topology.kubernetes.io/region: asia-northeast1
     topology.kubernetes.io/zone: asia-northeast1-b
+status:
+  conditions:
+  - reason: KubeletReady
+    status: "True"
+    type: Ready
 ---
 apiVersion: v1
 kind: Node
 metadata:
-  name: test-node3
+  name: node3
   labels:
     topology.kubernetes.io/region: asia-northeast1
     topology.kubernetes.io/zone: asia-northeast1-c
+status:
+  conditions:
+  - reason: KubeletReady
+    status: "True"
+    type: Ready

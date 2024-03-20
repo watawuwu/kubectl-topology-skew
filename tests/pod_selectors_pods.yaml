@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app1
+  namespace: default
+  lables:
+    app: app-a
+    group: group-a
+spec:
+  nodeName: node1
+status:
+  phase: Running
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app2
+  namespace: default
+  lables:
+    app: app-a
+    group: group-a
+spec:
+  nodeName: node2
+status:
+  phase: Running
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app3
+  namespace: default
+  lables:
+    app: app-a
+    group: group-a
+spec:
+  nodeName: node3
+status:
+  phase: Running
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app4
+  namespace: default
+  lables:
+    app: app-a
+    group: group-b
+spec:
+  nodeName: node1
+status:
+  phase: Running

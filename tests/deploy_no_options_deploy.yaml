@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy1
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: deploy1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy2
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: deploy2

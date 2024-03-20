@@ -5,8 +5,13 @@ use clap::builder::{
     Styles,
 };
 use clap::{Parser, Subcommand, ValueEnum};
-use std::fmt::{Display, Formatter};
+use std::{
+    collections::BTreeMap,
+    fmt::{Display, Formatter},
+};
 use strum::AsRefStr;
+
+const DEFAULT_ZONE_LABEL: &str = "topology.kubernetes.io/zone";
 
 fn help_styles() -> Styles {
     Styles::styled()
@@ -30,69 +35,11 @@ pub struct Args {
     pub kube_options: KubeConfigOptions,
 
     /// Output format
-    #[arg(short, long, default_value_t = OutputFormat::Text, global = true)]
+    #[arg(short, long, global = true, default_value_t = OutputFormat::Text)]
     pub output: OutputFormat,
 
     #[command(subcommand)]
     pub(crate) sub: SubCommand,
-}
-
-#[derive(Subcommand, Debug)]
-pub enum SubCommand {
-    /// Print pod topology skew
-    Pod {
-        #[command(flatten)]
-        pod_options: PodOptions,
-    },
-    /// Print node topology skew
-    Node {
-        #[command(flatten)]
-        node_options: NodeOptions,
-    },
-}
-
-#[derive(Debug, Parser)]
-pub struct PodOptions {
-    /// Kubernetes namespace name
-    #[arg(short, long, global = true)]
-    pub namespace: Option<String>,
-
-    /// Label selector for pod list
-    #[arg(short = 'l', long, value_parser = parse_key_val)]
-    pub selector: Option<Vec<Label>>,
-}
-
-impl PodOptions {
-    pub fn selectors(&self) -> String {
-        self.selector
-            .as_ref()
-            .map(LabelSelector::selector)
-            .unwrap_or_default()
-    }
-
-    pub fn is_selector(&self) -> bool {
-        self.selector.is_some()
-    }
-
-    pub fn namespace(&self) -> Option<&str> {
-        self.namespace.as_deref()
-    }
-}
-
-#[derive(Debug, Parser)]
-pub struct NodeOptions {
-    /// Label selector for pod list
-    #[arg(short = 'l', long, value_parser = parse_key_val)]
-    pub selector: Option<Vec<Label>>,
-}
-
-impl NodeOptions {
-    pub fn selectors(&self) -> String {
-        self.selector
-            .as_ref()
-            .map(LabelSelector::selector)
-            .unwrap_or_default()
-    }
 }
 
 #[derive(Debug, Parser)]
@@ -110,13 +57,162 @@ pub struct KubeConfigOptions {
     pub user: Option<String>,
 }
 
+#[derive(Subcommand, Debug)]
+pub enum SubCommand {
+    /// Print pod topology skew
+    #[command(visible_alias("po"))]
+    Pod {
+        #[command(flatten)]
+        options: ResourceOptions,
+    },
+    /// Print deployment topology skew
+    #[command(visible_alias("deploy"))]
+    Deployment {
+        #[command(flatten)]
+        options: ResourceWithNameOptions,
+    },
+    /// Print statefulset topology skew
+    #[command(visible_alias("sts"))]
+    StatefulSet {
+        #[command(flatten)]
+        options: ResourceWithNameOptions,
+    },
+    /// Print daemonset topology skew
+    #[command(visible_alias("ds"))]
+    DaemonSet {
+        #[command(flatten)]
+        options: ResourceWithNameOptions,
+    },
+    /// Print daemonset topology skew
+    Job {
+        #[command(flatten)]
+        options: ResourceWithNameOptions,
+    },
+    /// Print node topology skew
+    All {
+        #[command(flatten)]
+        options: ResourceOptions,
+    },
+    /// Print node topology skew
+    #[command(visible_alias("no"))]
+    Node {
+        #[command(flatten)]
+        options: NodeOptions,
+    },
+}
+
+#[derive(Debug, Parser)]
+pub struct ResourceOptions {
+    /// Kubernetes namespace name
+    #[arg(short, long, global = true)]
+    pub namespace: Option<String>,
+
+    /// Topology key
+    #[arg(short, long, default_value = DEFAULT_ZONE_LABEL)]
+    pub topology_key: String,
+
+    /// Label selector for pod list
+    #[arg(short = 'l', long, value_parser = parse_key_val)]
+    pub selector: Vec<Label>,
+}
+
+impl Default for ResourceOptions {
+    fn default() -> Self {
+        Self {
+            namespace: None,
+            topology_key: DEFAULT_ZONE_LABEL.to_string(),
+            selector: Vec::new(),
+        }
+    }
+}
+
+impl ResourceOptions {
+    pub fn selectors(&self) -> String {
+        self.selector.selector()
+    }
+
+    pub fn namespace(&self) -> Option<&str> {
+        self.namespace.as_deref()
+    }
+}
+
+#[derive(Debug, Parser)]
+pub struct ResourceWithNameOptions {
+    /// Kubernetes namespace name
+    #[arg(short, long, global = true)]
+    pub namespace: Option<String>,
+
+    /// Topology key
+    #[arg(short, long, default_value = DEFAULT_ZONE_LABEL)]
+    pub topology_key: String,
+
+    /// Label selector for pod list
+    #[arg(short = 'l', long, value_parser = parse_key_val)]
+    pub selector: Vec<Label>,
+
+    /// Object name
+    pub name: Option<String>,
+}
+
+impl Default for ResourceWithNameOptions {
+    fn default() -> Self {
+        Self {
+            namespace: None,
+            topology_key: DEFAULT_ZONE_LABEL.to_string(),
+            selector: Vec::new(),
+            name: None,
+        }
+    }
+}
+
+impl ResourceWithNameOptions {
+    pub fn selectors(&self) -> Option<String> {
+        let s = self.selector.selector();
+        // empty string to None
+        (!s.is_empty()).then_some(s)
+    }
+
+    pub fn namespace(&self) -> Option<&str> {
+        self.namespace.as_deref()
+    }
+
+    pub fn name(&self) -> Option<&str> {
+        self.name.as_deref()
+    }
+}
+
+#[derive(Debug, Parser)]
+pub struct NodeOptions {
+    /// Topology key
+    #[arg(short, long, default_value = DEFAULT_ZONE_LABEL)]
+    pub topology_key: String,
+
+    /// Label selector for pod list
+    #[arg(short = 'l', long, value_parser = parse_key_val)]
+    pub selector: Vec<Label>,
+}
+
+impl NodeOptions {
+    pub fn labels(&self) -> BTreeMap<String, String> {
+        self.selector.labels()
+    }
+}
+
+impl Default for NodeOptions {
+    fn default() -> Self {
+        Self {
+            topology_key: DEFAULT_ZONE_LABEL.to_string(),
+            selector: Vec::new(),
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, ValueEnum, AsRefStr)]
 #[strum(serialize_all = "snake_case")]
 pub enum OutputFormat {
     Text,
     Yaml,
     Json,
-    Tree,
 }
 
 impl Display for OutputFormat {

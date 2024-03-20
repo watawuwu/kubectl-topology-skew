@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job1
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: job1
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job2
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: job2

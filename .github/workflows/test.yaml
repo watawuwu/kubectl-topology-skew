@@ -1,0 +1,52 @@
+name: Test
+
+on:
+  push:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - target: x86_64-unknown-linux-gnu
+          os: ubuntu-latest
+        - target: x86_64-apple-darwin
+          os: macos-latest
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Setup code
+      uses: actions/checkout@v4
+
+    # https://github.com/actions/cache/blob/master/examples.md#rust---cargo
+    - name: Cache cargo files
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ matrix.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Setup Rust toolchain
+      run: |
+        rustup set profile minimal
+        rustup install stable
+        rustup override set stable
+        rustup component add clippy
+        rustup component add rustfmt
+        rustup target add ${{ matrix.target }}
+
+    - name: Check format
+      run: cargo fmt --all -- --check
+
+    - name: Run lint
+      run: cargo clippy --all-features -- -D warnings
+
+    - name: Test
+      run: cargo test --target=${{ matrix.target }}
+

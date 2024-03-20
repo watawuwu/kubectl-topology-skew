@@ -1,0 +1,46 @@
+name: Code Coverage
+
+on:
+  push:
+
+jobs:
+  code_coverage:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup code
+      uses: actions/checkout@v4
+
+    # https://github.com/actions/cache/blob/main/examples.md#rust---cargo
+    # https://www.reddit.com/r/learnrust/comments/lexewr/the_difference_in_behaviour_when_running_cargo/
+    - name: Cache cargo files
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Setup Rust toolchain
+      run: |
+        rustup set profile minimal
+        rustup install stable
+        rustup override set stable
+        rustup component add clippy
+        rustup component add rustfmt
+        rustup component add llvm-tools-preview
+
+    - name: Install cargo-llvm-cov
+      uses: taiki-e/install-action@cargo-llvm-cov
+
+    - name: Collect coverage data
+      run: cargo llvm-cov --all-features --lcov --output-path lcov.info
+
+    - name: Upload coverage
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: lcov.info
+        fail_ci_if_error: true

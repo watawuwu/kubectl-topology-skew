@@ -5,7 +5,7 @@ authors = ["Wataru Matsui <watawuwu@3bi.tech>"]
 readme = "README.md"
 edition = "2021"
 license = "MIT OR Apache-2.0"
-description = "kubectl plugin to display the count of pods and nodes per topology "
+description = "kubectl plugin to display pod count and skew per topology"
 repository = "https://github.com/watawuwu/kubectl-topology-skew"
 keywords = [
     "kubernetes",
@@ -17,6 +17,8 @@ keywords = [
 categories = ["command-line-utilities", "text-processing"]
 
 [[bin]]
+# Why are dashes and underscore mixed up in the name?
+# https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/#names-with-dashes-and-underscores
 name = "kubectl-topology_skew"
 path = "src/main.rs"
 
@@ -48,3 +50,25 @@ tower-test = "=0.4" # fixed version to match kube-rs
 
 [profile.release]
 strip = true
+
+# The profile that 'cargo dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
+
+# Config for 'cargo dist'
+[workspace.metadata.dist]
+# The preferred cargo-dist version to use in CI (Cargo.toml SemVer syntax)
+cargo-dist-version = "0.11.1"
+# CI backends to support
+ci = ["github"]
+# The installers to generate for each app
+installers = ["homebrew"]
+# A GitHub repo to push Homebrew formulas to
+tap = "watawuwu/homebrew-tap"
+# Target platforms to build apps for (Rust target-triple syntax)
+targets = ["aarch64-apple-darwin", "x86_64-apple-darwin", "x86_64-unknown-linux-gnu"]
+# Publish jobs to run in CI
+publish-jobs = ["homebrew"]
+# Publish jobs to run in CI
+pr-run-mode = "plan"

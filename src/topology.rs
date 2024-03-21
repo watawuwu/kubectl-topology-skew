@@ -120,8 +120,8 @@ mod tests {
 
         let table = vec![
             (
-                (vec!["zone-a", "zone-b", "zone-c"], &domains), // arg1 topology_values
-                ("zone-a", 1, 0, "zone-b", 1, 0, "zone-c", 1, 0), // arg2 domains
+                (vec!["zone-a", "zone-b", "zone-c"], &domains), // args
+                ("zone-a", 1, 0, "zone-b", 1, 0, "zone-c", 1, 0), // expected
             ),
             (
                 (

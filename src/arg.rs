@@ -88,7 +88,7 @@ pub enum SubCommand {
         #[command(flatten)]
         options: ResourceWithNameOptions,
     },
-    /// Print node topology skew
+    /// Print topology skew of resources such as deploy, sts, ds, jobs, etc
     All {
         #[command(flatten)]
         options: ResourceOptions,

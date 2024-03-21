@@ -2,8 +2,9 @@
 
 kubectl plugin to display pod count and skew per topology.
 
-![test](https://github.com/watawuwu/kubectl-topology-skew/workflows/Test/badge.svg?branch=main)
-![License](https://img.shields.io/crates/l/bump-bin.svg)
+![test](https://github.com/watawuwu/kubectl-topology-skew/workflows/Test/badge.svg)
+[![codecov](https://codecov.io/gh/watawuwu/kubectl-topology-skew/branch/main/graph/badge.svg)](https://codecov.io/gh/watawuwu/kubectl-topology-skew)
+![License](https://img.shields.io/github/license/watawuwu/kubectl-topology-skew)
 
 ## Getting Started
 
@@ -21,7 +22,7 @@ Commands:
   statefulset  Print statefulset topology skew [aliases: sts]
   daemonset    Print daemonset topology skew [aliases: ds]
   job          Print daemonset topology skew
-  all          Print node topology skew
+  all          Print topology skew of resources such as deploy, sts, ds, jobs, etc
   node         Print node topology skew [aliases: no]
   help         Print this message or the help of the given subcommand(s)
 
@@ -105,10 +106,6 @@ This project is licensed under either of
 - MIT license (http://opensource.org/licenses/MIT)
 
 at your option.
-
-## Contribution
-
-Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
 
 ## Authors
 

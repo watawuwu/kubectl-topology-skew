@@ -95,7 +95,7 @@ impl CachedNodeApi {
 
     // Command line is short-lived and not reacquired
     pub async fn get(&self, node_name: &str) -> Option<Node> {
-        self.cached.read().unwrap().get(node_name).map(Clone::clone)
+        self.cached.read().unwrap().get(node_name).cloned()
     }
 
     pub async fn list(&self, labels: &BTreeMap<String, String>) -> Vec<Node> {

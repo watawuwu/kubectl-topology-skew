@@ -1,6 +1,6 @@
 [package]
 name = "kubectl-topology-skew"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Wataru Matsui <watawuwu@3bi.tech>"]
 readme = "README.md"
 edition = "2021"

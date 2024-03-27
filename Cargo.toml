@@ -29,7 +29,7 @@ futures = "0.3.30"
 k8s-openapi = { version = "0.21", default-features = false, features = [
     "v1_29",
 ] }
-kube = { version = "0", features = ["runtime"] }
+kube = { version = "0", features = ["runtime", "oauth", "oidc"] }
 log = "0.4.13"
 pretty_env_logger = "0.5"
 serde = { version = "1", features = ["derive"] }
@@ -42,10 +42,10 @@ tabled = "0"
 derive_more = "0"
 
 [dev-dependencies]
-hyper = { version = "=0.14", features = [
+hyper = { version = "=1.2", features = [
     "full",
 ] } # fixed version to match kube-rs
-http = "=0.2" # fixed version to match kube-rs
+http = "=1.1" # fixed version to match kube-rs
 tower-test = "=0.4" # fixed version to match kube-rs
 
 [profile.release]
@@ -67,7 +67,11 @@ installers = ["homebrew"]
 # A GitHub repo to push Homebrew formulas to
 tap = "watawuwu/homebrew-tap"
 # Target platforms to build apps for (Rust target-triple syntax)
-targets = ["aarch64-apple-darwin", "x86_64-apple-darwin", "x86_64-unknown-linux-gnu"]
+targets = [
+    "aarch64-apple-darwin",
+    "x86_64-apple-darwin",
+    "x86_64-unknown-linux-gnu",
+]
 # Publish jobs to run in CI
 publish-jobs = ["homebrew"]
 # Publish jobs to run in CI

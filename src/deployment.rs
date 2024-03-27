@@ -76,7 +76,7 @@ mod tests {
     use super::*;
     use futures::pin_mut;
     use http::{Request, Response};
-    use hyper::Body;
+    use kube::client::Body;
     use tower_test::mock;
 
     #[tokio::test]

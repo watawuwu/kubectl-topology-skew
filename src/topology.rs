@@ -11,12 +11,24 @@ use tabled::Tabled;
 #[derive(Debug, Default, Serialize, PartialEq, PartialOrd, Deref, DerefMut, IntoIterator, From)]
 pub struct TopologyTables(BTreeSet<TopologyTable>);
 
-#[derive(Debug, Default, Serialize, PartialEq, Eq, PartialOrd, Ord, Constructor)]
+#[derive(Debug, Default, Serialize, PartialEq, Eq, Constructor)]
 pub struct TopologyTable {
     pub topologies: Topologies,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub header: Option<String>,
+}
+
+impl PartialOrd for TopologyTable {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for TopologyTable {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.header.cmp(&other.header)
+    }
 }
 
 impl TopologyTable {

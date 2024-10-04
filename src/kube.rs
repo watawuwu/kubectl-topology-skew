@@ -137,7 +137,7 @@ pub async fn kube_client(
     Ok(Client::try_from(config)?)
 }
 
-pub async fn resources<K: Resource>(
+pub async fn resources<K>(
     name: Option<&str>,
     namespace: &str,
     label: Option<&str>,
